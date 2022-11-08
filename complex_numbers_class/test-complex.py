@@ -1,64 +1,47 @@
-class Complex:
+import unittest
 
-    def __init__(self, re, im):
-        self._re = re
-        self._im = im
+from complex import Complex
 
-    def __eq__(self, other):
-        return (self._re == other._re) and (self._im == other._im)
 
-    def __str__(self):
-        if self._re == 0:
-            if self._im == 0:
-                return '0'
-            elif self._im == 1:
-                return 'i'
-            else:
-                return f'{self._im}i'
-        else:
-            if self._im == 0:
-                return f'{self._re}'
-            elif self._im == 1:
-                return f'{self._re} + i'
-            elif self._im < 0:
-                return f'{self._re} - {-self._im}i'
-            else:
-                return f'{self._re} + {self._im}i'
+class TestComplex(unittest.TestCase):
 
-    def add(self, other):
+    def test_equal(self):
+        first = Complex(1, 1)
+        second = Complex(1, 1)
+        third = Complex(2, 2)
+        self.assertTrue(first == second)
+        self.assertFalse(second == third)
 
-        re_sum = self._re + other._re
-        im_sum = self._im + other._im
+    def test_add(self):
+        first = Complex(2, 3)
+        second = Complex(1, 0)
+        third = Complex(2, 3)
+        self.assertEqual(first.add(second), Complex(3, 3))
+        self.assertNotEqual(first.add(third), Complex(1, 1))
 
-        return Complex(re_sum, im_sum)
+    def test_subtract(self):
+        first = Complex(5, 5)
+        second = Complex(2, 3)
+        third = Complex(0, 1)
+        self.assertEqual(first.subtract(second), Complex(3, 2))
+        self.assertEqual(third.subtract(second), Complex(-2, -2))
 
-    def subtract(self, other):
+    def test_multiply(self):
+        first = Complex(1, 1)
+        second = Complex(0, 3)
+        third = Complex(0, 0)
+        self.assertEqual(first.multiply(second), Complex(-3, 3))
+        self.assertEqual(first.multiply(third), Complex(0, 0))
 
-        re_sub = self._re - other._re
-        im_sub = self._im - other._im
+    def test_divide(self):
+        first = Complex(-2, 1)
+        second = Complex(1, -1)
+        third = Complex(0, 0)
+        self.assertEqual(first.divide(second), Complex(-1.5, -0.5))
+        self.assertEqual(first.divide(third), 'Divide by zero!')
 
-        return Complex(re_sub, im_sub)
-
-    def multiply(self, other):
-
-        re_mul = self._re * other._re - self._im * other._im
-        im_mul = self._im * other._re + self._re * other._im
-
-        return Complex(re_mul, im_mul)
-
-    def divide(self, other):
-
-        if (other._re == 0) and (other._im == 0):
-            return 'Divide by zero!'
-        else:
-            re_nom = self._re * other._re - self._im * (-other._im)
-            im_nom = self._im * other._re + self._re * (-other._im)
-            re_denom = other._re * other._re - other._im * (-other._im)
-
-            ans_re = re_nom / re_denom
-            ans_im = im_nom / re_denom
-
-            return Complex(ans_re, ans_im)
-
-    def length(self):
-        return (self._re ** 2 + self._im ** 2) ** (1 / 2)
+    def test_length(self):
+        first = Complex(3, 4)
+        second = Complex(0, 3.5)
+        self.assertEqual(first.length(), 5)
+        self.assertEqual(second.length(), 3.5)
