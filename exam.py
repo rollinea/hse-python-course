@@ -1,3 +1,5 @@
+
+
 SEPARATOR = '-----'
 
 
@@ -12,7 +14,7 @@ class StrategyDeal:
         return [round(target, 1) for target in self.targets]
 
     def get_target_percents(self):
-        return [round(target / self.entry, 3) for target in self.targets]
+        return [round((target / self.entry)*100-100, 3) for target in self.targets]
 
     def get_target_banks(self):
         return [round((self.bank / self.entry) * target, 3) for target in self.targets]
